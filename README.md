@@ -1,5 +1,5 @@
 # 0x19. C - Stacks, Queues - LIFO, FIFO
-About: Stack and queue, and their usage
+About: stack, queue, and their usage
 
 ## Objectives:
 * To know what LIFO and FIFO mean
@@ -68,4 +68,4 @@ typedef struct instruction_s
 |  5.   |		|		|
 
 ## Compilation & Output
-The codes were compiled using: ```gcc -Wall -Werror -Wextra -pedantic -std=c89 *.c -o monty```
+These codes were compiled using: ```gcc -Wall -Werror -Wextra -pedantic -std=c89 *.c -o monty```
