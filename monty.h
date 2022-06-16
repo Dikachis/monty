@@ -96,4 +96,9 @@ extern data_t data;
 /* main.c */
 void monty(args_t *args);
 
+/* get_func.c */
+void (*get_func(char **parsed))(stack_t **, unsigned int);
+void push_handler(stack_t **stack, unsigned int line_number);
+void pall_handler(stack_t **stack, unsigned int line_number);
+
 #endif
