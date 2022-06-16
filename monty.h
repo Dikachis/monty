@@ -101,4 +101,11 @@ void (*get_func(char **parsed))(stack_t **, unsigned int);
 void push_handler(stack_t **stack, unsigned int line_number);
 void pall_handler(stack_t **stack, unsigned int line_number);
 
+/* handler_funcs1.c */
+void pint_handler(stack_t **stack, unsigned int line_number);
+void pop_handler(stack_t **stack, unsigned int line_number);
+void swap_handler(stack_t **stack, unsigned int line_number);
+void add_handler(stack_t **stack, unsigned int line_number);
+void nop_handler(stack_t **stack, unsigned int line_number);
+
 #endif
