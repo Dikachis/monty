@@ -3,9 +3,31 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <string.h>
 #include <ctype.h>
-#include <unistd.h>
+#define TOK_DELIM " \t\r\n\v\a"
+
+/**
+ * struct global - store neccesary variables
+ * @words: array with the words of the instruction
+ * @buffer: current line processed
+ * @fd: file to process
+ *
+ * Description: store neccesary variables
+ */
+typedef struct global
+{
+	char **words;
+	char *buffer;
+	FILE *fd;
+	int is_stack;
+} global_t;
+
+extern global_t global_var;
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -37,75 +59,31 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-/**
- * struct args_s - structure of arguments from main
- * @av: name of the file from the command line
- * @ac: number of arguments from main
- * @line_number: number of the current line in the file
- *
- * Description: arguments passed to main from the command line
- * used in different functions, organized in a struct for clarity
- */
-typedef struct args_s
-{
-	char *av;
-	int ac;
-	unsigned int line_number;
-} args_t;
-
-/**
- * struct data_s - extern data to access inside functions
- * @line: line from the file
- * @words: parsed line
- * @stack: pointer to the stack
- * @fptr: file pointer
- * @qflag: flag for queue or stack
- */
-typedef struct data_s
-{
-	char *line;
-	char **words;
-	stack_t *stack;
-	FILE *fptr;
-	int qflag;
-} data_t;
-
-typedef stack_t dlistint_t;
-
-extern data_t data;
-
-#define DATA_INIT {NULL, NULL, NULL, NULL, 0}
-
-#define USAGE "USAGE: monty file\n"
-#define FILE_ERROR "Error: Can't open file %s\n"
-#define UNKNOWN "L%u: unknown instruction %s\n"
-#define MALLOC_FAIL "Error: malloc failed\n"
-#define PUSH_FAIL "L%u: usage: push integer\n"
-#define PINT_FAIL "L%u: can't pint, stack empty\n"
-#define POP_FAIL "L%u: can't pop an empty stack\n"
-#define SWAP_FAIL "L%u: can't swap, stack too short\n"
-#define ADD_FAIL "L%u: can't add, stack too short\n"
-#define SUB_FAIL "L%u: can't sub, stack too short\n"
-#define DIV_FAIL "L%u: can't div, stack too short\n"
-#define DIV_ZERO "L%u: division by zero\n"
-#define MUL_FAIL "L%u: can't mul, stack too short\n"
-#define MOD_FAIL "L%u: can't mod, stack too short\n"
-#define PCHAR_FAIL "L%u: can't pchar, stack empty\n"
-#define PCHAR_RANGE "L%u: can't pchar, value out of range\n"
-
-/* main.c */
-void monty(args_t *args);
-
-/* get_func.c */
-void (*get_func(char **parsed))(stack_t **, unsigned int);
-void push_handler(stack_t **stack, unsigned int line_number);
-void pall_handler(stack_t **stack, unsigned int line_number);
-
-/* handler_funcs1.c */
-void pint_handler(stack_t **stack, unsigned int line_number);
-void pop_handler(stack_t **stack, unsigned int line_number);
-void swap_handler(stack_t **stack, unsigned int line_number);
-void add_handler(stack_t **stack, unsigned int line_number);
-void nop_handler(stack_t **stack, unsigned int line_number);
+size_t countwords(char *in);
+char **split_line(char *line, size_t len, stack_t **stack);
+void get_func(stack_t **stack, unsigned int line_number);
+void f_push(stack_t **stack, unsigned int line_number);
+void f_pall(stack_t **stack, unsigned int line_number);
+void f_pint(stack_t **stack, unsigned int line_number);
+void f_pop(stack_t **stack, unsigned int line_number);
+void f_swap(stack_t **stack, unsigned int line_number);
+void f_add(stack_t **stack, unsigned int line_number);
+void f_sub(stack_t **stack, unsigned int line_number);
+void f_div(stack_t **stack, unsigned int line_number);
+void f_mul(stack_t **stack, unsigned int line_number);
+void f_mod(stack_t **stack, unsigned int line_number);
+void f_pchar(stack_t **stack, unsigned int line_number);
+void f_pstr(stack_t **stack, unsigned int line_number);
+void f_rotl(stack_t **stack, unsigned int line_number);
+void f_rotr(stack_t **stack, unsigned int line_number);
+void f_stack(stack_t **stack, unsigned int line_number);
+void print_number(size_t n);
+void print_arr(char **arr);
+void free_loop(char **arr);
+void error_malloc(stack_t **stack);
+stack_t *add_node_end(stack_t **head, const int n);
+stack_t *add_node_head(stack_t **head, const int n);
+void free_stack(stack_t *head);
+instruction_t definition(int i);
 
 #endif
