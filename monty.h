@@ -16,6 +16,7 @@
  * @words: array with the words of the instruction
  * @buffer: current line processed
  * @fd: file to process
+ * @is_stack: flag for queue or stack
  *
  * Description: store neccesary variables
  */
